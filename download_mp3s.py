@@ -7,19 +7,6 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-# List of website URLs to process
-urls = [
-    "http://breistest.lexiconista.com/en/gram/ag",
-    "http://breistest.lexiconista.com/en/gram/as",
-    "http://breistest.lexiconista.com/en/gram/ar",
-    "http://breistest.lexiconista.com/en/gram/de",
-    "http://breistest.lexiconista.com/en/gram/do",
-    "http://breistest.lexiconista.com/en/gram/i",
-    "http://breistest.lexiconista.com/en/gram/idir",
-    "http://breistest.lexiconista.com/en/gram/le",
-    "http://breistest.lexiconista.com/en/gram/ó",
-]
-
 # Base URL for constructing MP3 links
 BASE_MP3_URL = "http://breistest.lexiconista.com/"
 
@@ -120,8 +107,19 @@ def parse_and_download(url):
             download_mp3(mp3_url, dialect, preposition, word)
 
 
+def load_urls_from_file(file_path):
+    """Load URLs from a text file and return a list of URLs."""
+    with open(file_path, "r") as file:
+        urls = [line.strip() for line in file if line.strip()]
+    return urls
+
+
 def main():
     create_directories()
+
+    # Load URLs from a text file
+    urls = load_urls_from_file("urls.txt")
+
     for url in urls:
         parse_and_download(url)
     logging.info("All downloads completed.")
